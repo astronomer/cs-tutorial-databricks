@@ -1,4 +1,3 @@
-import json
 from airflow.providers.databricks.hooks.databricks import DatabricksHook
 
 class DatabricksUtil:

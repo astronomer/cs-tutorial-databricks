@@ -5,7 +5,6 @@ from airflow.utils.task_group import TaskGroup
 from airflow.providers.databricks.operators.databricks import DatabricksRunNowOperator, DatabricksSubmitRunOperator
 from datetime import datetime
 from include.databricks_tools import DatabricksUtil
-from airflow.providers.databricks.hooks.databricks import DatabricksHook
 
 '''
 Notes
@@ -29,7 +28,7 @@ Notes
 
 #these typically would go into Airflow Variables, but setting them here for Demonstration purposes.
 job_id = 9 #grabbed this from the databricks UI. Represents a job that is using a notebook that has a hello world application
-run_id = 131 #represents a run of job 9.
+run_id = 293 #represents a run of job 9.
 cluster_id = "1101-180739-3e8n7nkv" #created a "default_cluster" as an All-Purpose Cluster
 
 new_cluster = {
@@ -117,7 +116,9 @@ with DAG('databricks_example_dag',
                 }
             )
 
-            #I think this is broken opened a bug here https://github.com/apache/airflow/issues/19357
+            #returns the state of a job run given the run id
+            #Please note, to use this task, you must set the following environment variable:
+            #   AIRFLOW__CORE__ENABLE_XCOM_PICKLING=TRUE
             python_get_run_state = PythonOperator(
                 task_id="python_get_run_state",
                 python_callable=DatabricksUtil().get_run_state,
